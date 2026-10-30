@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Periodic Table of Everything</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f1fa;--ink:#17152b;--mut:#5d5a7a;--pan:#fff;--line:#d9d5ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0c1f;--ink:#f1eefc;--mut:#a49fc9;--pan:#191636;--line:#2e2a57;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e0c1f;--ink:#f1eefc;--mut:#a49fc9;--pan:#191636;--line:#2e2a57;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.5 Sora,system-ui,sans-serif;padding:20px clamp(12px,3vw,40px) 48px}
+h1{font:800 clamp(1.6rem,4.5vw,3.2rem)/1.05 Unbounded,Impact,sans-serif;margin:0 0 8px;letter-spacing:-.02em}
+.sub{color:var(--mut);max-width:62ch;margin:0 0 18px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.seg{display:flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button,.clkbtn{font:600 .9rem Sora,sans-serif;padding:8px 16px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.clkbtn{border:2px solid var(--ink);border-radius:999px}
+.clkbtn.on{background:#ff3d71;border-color:#ff3d71;color:#fff}
+button:focus-visible{outline:3px solid #ff3d71;outline-offset:2px}
+.leg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{display:flex;align-items:center;gap:6px;font:600 .78rem Sora,sans-serif;padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--pan);color:var(--ink);cursor:pointer}
+.chip i{width:10px;height:10px;border-radius:50%;background:hsl(var(--h) 65% 60%)}
+.chip.on{border-color:var(--ink)}
+.rd{display:none;align-items:stretch;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.clk .rd{display:flex}
+.dig{font:800 clamp(2rem,6vw,3.6rem)/1 Unbounded,sans-serif;align-self:center;margin-right:8px;font-variant-numeric:tabular-nums}
+.tile{background:var(--pan);border:2px solid var(--line);border-radius:12px;padding:8px 14px;min-width:104px}
+.tile b{display:block;font:800 1.9rem/1.1 Unbounded,sans-serif}
+.tile span{font-size:.75rem;color:var(--mut)}
+.tile.h{border-color:#ff3d71}.tile.m{border-color:#00e0b8}.tile.s{border-color:#ffd23f}
+.note{font-size:.78rem;color:var(--mut);align-self:center;max-width:30ch}
+.wrap{overflow-x:auto;padding:10px 6px 14px}
+.t{display:grid;grid-template-columns:repeat(18,minmax(52px,1fr));grid-template-rows:repeat(7,auto) 14px repeat(2,auto);gap:4px;min-width:960px}
+.c{position:relative;aspect-ratio:1/1.1;border-radius:6px;padding:3px 5px;background:hsl(var(--h) 65% 60%);color:#14122a;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:0;text-align:left;font:inherit;overflow:hidden;transition:transform .15s,opacity .25s}
+.c .z{font-size:.6rem;opacity:.75}
+.c .s{font:800 1.1rem/1 Unbounded,Impact,sans-serif}
+.c .n{font-size:.52rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.c .e{position:absolute;top:2px;right:3px;font-size:.62rem}
+.c:hover,.c:focus-visible{transform:scale(1.14);z-index:3;outline:2px solid var(--ink)}
+.dim{opacity:.16}
+.clk .c{opacity:.26}
+.clk .c.w{opacity:.7}
+.clk .c.h,.clk .c.m,.clk .c.s{opacity:1;transform:scale(1.16);z-index:2;outline:3px solid;box-shadow:0 0 20px 4px hsl(var(--h) 90% 60%)}
+.clk .c.s{outline-color:#ffd23f}.clk .c.m{outline-color:#00e0b8}.clk .c.h{outline-color:#ff3d71}
+.info{margin-top:6px;background:var(--pan);border:2px solid var(--line);border-radius:14px;padding:14px 18px;min-height:76px;display:flex;gap:16px;align-items:center}
+.info .big{font:800 2.6rem/1 Unbounded,sans-serif;min-width:90px}
+.info p{margin:0}
+.info small{color:var(--mut)}
+.clk .info{display:none}
+@media (prefers-reduced-motion:reduce){.c{transition:none}}
+</style>
+</head>
+<body>
+<h1>The Periodic Table of Everything</h1>
+<p class="sub">118 elements, remixed. Flip between real chemistry and a mashup of games, metal bands, football, the NBA, painters, maths, robots, stats and movies. Then switch the clock on and the table tells the time.</p>
+
+<div class="bar">
+  <div class="seg" role="group" aria-label="Table mode">
+    <button id="bc">Chemistry</button><button id="bm" class="on">Mashup</button>
+  </div>
+  <button class="clkbtn" id="ck" aria-pressed="false">Clock</button>
+</div>
+
+<div class="leg" id="leg"></div>
+
+<div id="app">
+  <div class="rd">
+    <div class="dig" id="dig">00:00:00</div>
+    <div class="tile h"><b id="th"></b><span id="lh"></span></div>
+    <div class="tile m"><b id="tm"></b><span id="lm"></span></div>
+    <div class="tile s"><b id="ts"></b><span id="ls"></span></div>
+    <div class="note">Element number = the time value. Hours 1–24, minutes and seconds 1–60; zero wraps to the top. Lit cells show the seconds filling up.</div>
+  </div>
+  <div class="wrap"><div class="t" id="t"></div></div>
+  <div class="info" id="info"><div class="big">?</div><p>Tap any element to see its chemistry name and its mashup twin.</p></div>
+</div>
+
+<script>
+const CH="Hydrogen,Helium,Lithium,Beryllium,Boron,Carbon,Nitrogen,Oxygen,Fluorine,Neon,Sodium,Magnesium,Aluminium,Silicon,Phosphorus,Sulfur,Chlorine,Argon,Potassium,Calcium,Scandium,Titanium,Vanadium,Chromium,Manganese,Iron,Cobalt,Nickel,Copper,Zinc,Gallium,Germanium,Arsenic,Selenium,Bromine,Krypton,Rubidium,Strontium,Yttrium,Zirconium,Niobium,Molybdenum,Technetium,Ruthenium,Rhodium,Palladium,Silver,Cadmium,Indium,Tin,Antimony,Tellurium,Iodine,Xenon,Caesium,Barium,Lanthanum,Cerium,Praseodymium,Neodymium,Promethium,Samarium,Europium,Gadolinium,Terbium,Dysprosium,Holmium,Erbium,Thulium,Ytterbium,Lutetium,Hafnium,Tantalum,Tungsten,Rhenium,Osmium,Iridium,Platinum,Gold,Mercury,Thallium,Lead,Bismuth,Polonium,Astatine,Radon,Francium,Radium,Actinium,Thorium,Protactinium,Uranium,Neptunium,Plutonium,Americium,Curium,Berkelium,Californium,Einsteinium,Fermium,Mendelevium,Nobelium,Lawrencium,Rutherfordium,Dubnium,Seaborgium,Bohrium,Hassium,Meitnerium,Darmstadtium,Roentgenium,Copernicium,Nihonium,Flerovium,Moscovium,Livermorium,Tennessine,Oganesson".split(",");
+const SY="H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og".split(" ");
+const MX="G Halo,N Euler,M Slayer,A Monet,B Lakers,C Alien,F Barça,G Zelda,N Pi,M Megadeth,A Warhol,B Celtics,R Atlas,S Mean,C Matrix,G Tetris,F Arsenal,A Dalí,M Pantera,B Warriors,N Prime,G Mario,S Median,R Roomba,B Bulls,C Inception,M Gojira,F Liverpool,A Klimt,G Sonic,N Fibonacci,B Spurs,R ASIMO,S Variance,M Tool,C Akira,F Real Madrid,G Doom,A Picasso,B Heat,N Zero,R Optimus,S Mode,M Opeth,C Tron,F Juventus,G Pac-Man,A Mondrian,B Knicks,N Phi,S Sigma,M Metallica,R Wall-E,C Pulp,F Bayern,G Portal,A Rembrandt,B Nets,N Topology,R Spot,S Z-score,M Sabbath,C Rocky,F Milan,G Pokémon,A Magritte,B Suns,N Calculus,R Arduino,S Outlier,M Maiden,C Jaws,F Inter,G Fortnite,A Basquiat,B Nuggets,N Imaginary,R Servo,S Bell,M Priest,C Shrek,F Ajax,G Minecraft,A Frida,B Clippers,N Chaos,R Gyro,S Regress,M Anthrax,C Gladiator,F Dortmund,G Skyrim,A Vermeer,B Raptors,N Fractal,R Drone,S Quartile,M Dream Theater,C Fargo,F PSG,G Elden Ring,A Hokusai,B Thunder,N Limit,R Cobot,S Skew,M Kreator,C Amélie,F Napoli,G Celeste,A Munch,B Hawks,N Graph,R Lidar,S p-value,M Sepultura,C Dune,F Celtic".split(",").map(x=>({t:x[0],l:x.slice(2)}));
+const T={G:["Gaming","🎮",265],M:["Metal bands","🤘",355],F:["Football","⚽",140],B:["NBA","🏀",28],A:["Art","🎨",320],N:["Maths","∑",215],R:["Robotics","🤖",185],S:["Stats","📊",52],C:["Movies","🎬",85]};
+const K={alk:["Alkali metals",355],ake:["Alkaline earth",28],trn:["Transition metals",215],ptm:["Post-transition",185],mtl:["Metalloids",140],non:["Nonmetals",85],hal:["Halogens",52],nob:["Noble gases",290],lan:["Lanthanides",320],act:["Actinides",265]};
+const cat=z=>{const i=a=>a.includes(z);
+  if(i([3,11,19,37,55,87]))return"alk";if(i([4,12,20,38,56,88]))return"ake";
+  if(z>=57&&z<=71)return"lan";if(z>=89&&z<=103)return"act";
+  if(i([2,10,18,36,54,86,118]))return"nob";if(i([9,17,35,53,85,117]))return"hal";
+  if(i([5,14,32,33,51,52]))return"mtl";if(i([1,6,7,8,15,16,34]))return"non";
+  if(i([13,31,49,50,81,82,83,84,113,114,115,116]))return"ptm";return"trn"};
+const pos=z=>{if(z==1)return[1,1];if(z==2)return[1,18];if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];
+  if(z<=12)return[3,z-10];if(z<=18)return[3,z];if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];
+  if(z<=56)return[6,z-54];if(z<=70)return[9,z-54];if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];
+  if(z<=102)return[10,z-86];return[7,z-100]};
+const mk=l=>{if(l=="Dream Theater")return"DT";const s=l.replace(/[^A-Za-zÀ-ÿ]/g,"");return s[0].toUpperCase()+(s[1]||"").toLowerCase()};
+const $=s=>document.querySelector(s);
+let mode="m",flt=null,clock=false;
+const els=[],t=$("#t");
+for(let z=1;z<=118;z++){const[r,c]=pos(z),b=document.createElement("button");
+  b.className="c";b.style.gridRow=r;b.style.gridColumn=c;b.dataset.z=z;t.append(b)}
+const grp=z=>mode=="m"?MX[z-1].t:cat(z);
+const hue=z=>mode=="m"?T[MX[z-1].t][2]:K[cat(z)][1];
+const sym=z=>mode=="m"?mk(MX[z-1].l):SY[z-1];
+const nm=z=>mode=="m"?MX[z-1].l:CH[z-1];
+function render(){
+  [...t.children].forEach(b=>{const z=+b.dataset.z;els[z]=b;
+    b.style.setProperty("--h",hue(z));
+    b.innerHTML=`<span class="z">${z}</span><span class="s">${sym(z)}</span><span class="n">${nm(z)}</span>`+(mode=="m"?`<span class="e">${T[MX[z-1].t][1]}</span>`:"");
+    b.classList.toggle("dim",!!flt&&grp(z)!=flt)});
+  const src=mode=="m"?T:K;
+  $("#leg").innerHTML=Object.keys(src).map(k=>`<button class="chip${flt==k?" on":""}" data-k="${k}" style="--h:${mode=="m"?T[k][2]:K[k][1]}"><i></i>${src[k][0]}</button>`).join("");
+  tick();
+}
+$("#leg").onclick=e=>{const k=e.target.closest(".chip");if(!k)return;flt=flt==k.dataset.k?null:k.dataset.k;render()};
+function setMode(m){mode=m;flt=null;$("#bm").classList.toggle("on",m=="m");$("#bc").classList.toggle("on",m=="c");render()}
+$("#bm").onclick=()=>setMode("m");$("#bc").onclick=()=>setMode("c");
+$("#ck").onclick=e=>{clock=!clock;e.target.classList.toggle("on",clock);e.target.setAttribute("aria-pressed",clock);$("#app").classList.toggle("clk",clock);tick()};
+t.onclick=e=>{const b=e.target.closest(".c");if(!b)return;const z=+b.dataset.z,i=MX[z-1];
+  $("#info").innerHTML=`<div class="big">${SY[z-1]}</div><p><b>${z} · ${CH[z-1]}</b><br>Mashup twin: <b>${i.l}</b> <small>(${T[i.t][0]} ${T[i.t][1]})</small></p>`};
+const p2=n=>String(n).padStart(2,"0");
+function tick(){
+  const d=new Date(),H=d.getHours(),Mi=d.getMinutes(),S=d.getSeconds(),
+    h=H||24,m=Mi||60,s=S||60;
+  els.forEach((b,z)=>{if(!b)return;b.classList.toggle("h",z==h);b.classList.toggle("m",z==m);b.classList.toggle("s",z==s);b.classList.toggle("w",z<s)});
+  $("#dig").textContent=`${p2(H)}:${p2(Mi)}:${p2(S)}`;
+  [["h",h],["m",m],["s",s]].forEach(([k,v])=>{$("#t"+k).textContent=sym(v);$("#l"+k).textContent=`${{h:"Hour",m:"Minute",s:"Second"}[k]} ${v} · ${nm(v)}`});
+}
+render();setInterval(tick,1000);
+</script>
+</body>
+</html>
